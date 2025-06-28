@@ -1,6 +1,6 @@
-# OctaStore v0.2.0 Showcase Example
+# OctaStore v0.2.1 Showcase Example
 
-from octastore import OctaCluster, DataStore, OctaFile, NotificationManager, __config__
+from octastore import __config__, OctaCluster, DataStore, BaseObject, BaseKeyValue, NotificationManager
 from cryptography.fernet import Fernet
 import sys
 
@@ -38,9 +38,9 @@ __config__.setdatpath() # Update `datpath` variable of `__config__` for offline 
 # the path setup with `__config__.cleanpath` property can be used for other application needs besides OctaStore, it will return a clean path based on your os (ex. Windows -> C:/Users/YourUsername/Documents/Taireru LLC/Cool RPG Game/)
 
 # -------------------------
-# System Instantiation
+# System Initialization
 # -------------------------
-ds = DataStore(db=database, encryption_key=encryption_key)
+db = DataStore(db=database, encryption_key=encryption_key)
 
 # -------------------------
 # Player Class Definition
@@ -58,7 +58,7 @@ player = Player(objectname="john_doe", score=100, password="123")
 # Save & Load Player Data with Encryption
 # -------------------------
 # Save player data to the repository (with encryption)
-ds.save_object(
+db.save_object(
     objectname="john_doe",
     objectinstance=player,
     isencrypted=True,
@@ -67,7 +67,7 @@ ds.save_object(
 )
 
 # Load player data
-ds.load_object(objectname="john_doe", objectinstance=player, isencrypted=True)
+db.load_object(objectname="john_doe", objectinstance=player, isencrypted=True)
 
 # -------------------------
 # Game Flow Functions
@@ -82,7 +82,7 @@ def main_menu():
 # Account Validation & Login
 # -------------------------
 # Validate player credentials
-if ds.get_all(path="players"):
+if db.get_all(isencrypted=False, datatype=BaseObject, path="players"): # datatype can only be BaseObject or BaseKeyValue
     if player.password == input("Enter your password: "):
         print("Login successful!")
         load_game()
@@ -94,25 +94,11 @@ if ds.get_all(path="players"):
 # Save & Load General Data with Encryption
 # -------------------------
 # Save data (key-value) to the repository (with encryption)
-ds.save_data(key="key_name", value=69, path="data", isencrypted=True)
+db.save_data(key="key_name", value=69, path="data", isencrypted=True)
 
 # Load and display specific key-value pair
-loaded_key_value = ds.load_data(key="key_name", path="data", isencrypted=True)
+loaded_key_value = db.load_data(key="key_name", path="data", isencrypted=True)
 print(f"Key: {loaded_key_value.key}, Value: {loaded_key_value.value}")
 
 # Display all stored data
-print("All stored data:", ds.get_all(isencrypted=True, path="data"))
-
-# Delete specific key-value data
-ds.delete_data(key="key_name", path="data")
-
-# -------------------------
-# Player Account Management
-# -------------------------
-# Display all player accounts
-print("All player accounts:", ds.get_all(path="players"))
-
-# Delete a specific player account
-NotificationManager.hide()  # Hide notifications temporarily
-ds.delete_object(objectname="john_doe")
-NotificationManager.show()  # Show notifications again
+print("All stored data:", db.get_all(isencrypted=True, datatype=BaseKeyValue, pa
