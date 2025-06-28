@@ -52,7 +52,7 @@ class Player:
         self.password = password
 
 # Create a sample player instance
-player = Player(objectname="john_doe", score=100, password="123")
+player = Player(username="john_doe", score=0, password="123")
 
 # -------------------------
 # Save & Load Player Data with Encryption
