@@ -4,8 +4,8 @@ from .octastore import OctaStore
 
 class OctaCluster:
     def __init__(self, octastores: List[Dict[str, str]]) -> None:
-        self.octastores = [OctaStore(**gb) for gb in octastores]
-        self.current_index = 0
+        self.octastores: List[OctaStore] = [OctaStore(**gb) for gb in octastores]
+        self.current_index: int = 0
 
     def _get_active_octastore(self) -> Optional['OctaStore']:
         if self.current_index < len(self.octastores):
@@ -46,7 +46,7 @@ class OctaCluster:
                 return content, sha
         return None, None
 
-    def write_data(self, path: str, data: str, message: str = "Updated data") -> int:
+    def write_data(self, path: str, data: str, message: Optional[str] = "Updated data") -> int:
         while self.current_index < len(self.octastores):
             octastore = self._get_active_octastore()
             if octastore:
@@ -57,11 +57,11 @@ class OctaCluster:
                     return status
         return 507
 
-    def delete_data(self, path: str, message: str = "Deleted data") -> int:
+    def delete_data(self, path: str, message: Optional[str] = "Deleted data") -> int:
         status_codes = [gb.delete_data(path, message) for gb in self.octastores]
         return 200 if any(status == 200 for status in status_codes) else 404
 
-    def upload_file(self, file_path: str, remote_path: str, message: str = "Uploaded file") -> int:
+    def upload_file(self, file_path: str, remote_path: str, message: Optional[str] = "Uploaded file") -> int:
         while self.current_index < len(self.octastores):
             octastore = self._get_active_octastore()
             if octastore:
@@ -91,17 +91,7 @@ class OctaCluster:
                 return keys
         return []
 
-    def data_loaded(self) -> bool:
-        return any(gb.data_loaded() for gb in self.octastores)
-
-    def is_online(self, url='http://www.google.com', timeout=5) -> bool:
-        try:
-            response = requests.get(url, timeout=timeout)
-            return response.status_code == 200
-        except (requests.ConnectionError, requests.Timeout):
-            return False
-
     @staticmethod
     def generate_example() -> None:
-        # Static method forwarding to OctaStore (pick the first one or OctaStore class itself)
+        # Static method forwarding to OctaStore (pick the OctaStore class itself)
         OctaStore.generate_example()
