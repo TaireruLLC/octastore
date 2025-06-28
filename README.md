@@ -1,4 +1,4 @@
-# 🚩 Warning: The GitHub version which you are currently reading from is a pre-release and is not updated on PyPy yet. Moreover, it features information that is yet to come, such as a future `gitbase` version or a non-existent OctaStore Web, which has yet to be migrated. Said things are set to release at the same time as the official release of v0.2.1 of OctaStore. Thank you for your patience!
+# 🚩 Warning: The GitHub version, which you are currently reading from, is a pre-release and is not updated on PyPy yet. Moreover, it features information that is yet to come, such as a future `gitbase` version or a non-existent OctaStore Web, which has yet to be migrated. Said things are set to release at the same time as the official release of v0.2.1 of OctaStore. Thank you for your patience!
 
 # OctaStore 🚀
 
