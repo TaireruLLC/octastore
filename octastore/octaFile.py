@@ -7,6 +7,7 @@ import pyaudio
 import cv2
 import numpy as np
 from moviepy import VideoFileClip
+from typing import Optional, Dict
 
 class OctaFile:
     """
@@ -14,12 +15,12 @@ class OctaFile:
     without downloading them.
     """
 
-    def __init__(self, repo_owner: str, repo_name: str, token: str, branch: str = 'main') -> None:
-        self.repo_owner = repo_owner
-        self.repo_name = repo_name
-        self.token = token
-        self.branch = branch
-        self.headers = {
+    def __init__(self, repo_owner: str, repo_name: str, token: str, branch: Optional[str] = 'main'):
+        self.repo_owner: str = repo_owner
+        self.repo_name: str = repo_name
+        self.token: str = token
+        self.branch: Optional[str] = branch
+        self.headers: Dict[str, str] = {
             "Authorization": f"token {self.token}",
             "Accept": "application/vnd.github.v3.raw"
         }
@@ -30,8 +31,8 @@ class OctaFile:
 
     def _fetch_file(self, path: str) -> bytes:
         """Fetches a file's content as bytes from GitHub without downloading."""
-        url = self._get_file_url(path)
-        response = requests.get(url, headers=self.headers)
+        url: str = self._get_file_url(path)
+        response: requests.Response = requests.get(url, headers=self.headers)
         if response.status_code == 200:
             return base64.b64decode(response.json()["content"])  # Decode base64 content
         else:
@@ -47,7 +48,7 @@ class OctaFile:
         Returns:
             io.BytesIO: The file as a stream.
         """
-        file_bytes = self._fetch_file(remote_path)
+        file_bytes: bytes = self._fetch_file(remote_path)
         return io.BytesIO(file_bytes)
 
     def play_audio(self, remote_path: str) -> None:
@@ -58,16 +59,16 @@ class OctaFile:
             remote_path (str): Path to the audio file in the repository.
         """
         try:
-            audio_stream = self.get_file(remote_path)
-            wf = wave.open(audio_stream, 'rb')
+            audio_stream: io.BytesIO = self.get_file(remote_path)
+            wf: wave.Wave_read = wave.open(audio_stream, 'rb')
 
-            p = pyaudio.PyAudio()
-            stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+            p: pyaudio.PyAudio = pyaudio.PyAudio()
+            stream: pyaudio.Stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
                             channels=wf.getnchannels(),
                             rate=wf.getframerate(),
                             output=True)
 
-            data = wf.readframes(1024)
+            data: bytes = wf.readframes(1024)
             while data:
                 stream.write(data)
                 data = wf.readframes(1024)
@@ -89,15 +90,15 @@ class OctaFile:
             remote_path (str): Path to the video file in the repository.
         """
         try:
-            video_stream = self.get_file(remote_path)
+            video_stream: io.BytesIO = self.get_file(remote_path)
 
             # Use a temporary file to store video data
             with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_video:
                 temp_video.write(video_stream.read())
-                temp_video_path = temp_video.name  # Store the temp file path
+                temp_video_path: str = temp_video.name  # Store the temp file path
 
             # Open and play the video
-            cap = cv2.VideoCapture(temp_video_path)
+            cap: cv2.VideoCapture = cv2.VideoCapture(temp_video_path)
             while cap.isOpened():
                 ret, frame = cap.read()
                 if not ret:
@@ -109,7 +110,4 @@ class OctaFile:
             cap.release()
             cv2.destroyAllWindows()
 
-            print(f"Video played successfully from {remote_path}")
-
-        except Exception as e:
-            print(f"Error playing video: {e}")
+            print(f"Video
