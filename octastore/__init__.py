@@ -4,7 +4,7 @@ OctaStore: A module for managing data storage in a GitHub repository, allowing r
 import sys
 import os
 from fancyutil import NotificationManager as nm, init as fancy_init
-from .octastore import OctaStore, init, hasdataloaded
+from .octastore import OctaStore, init, hasdataloaded, is_online
 from .octacluster import OctaCluster
 from .dsf import DataStore, KeyValue, Object, BaseKeyValue, BaseObject
 from .octaFile import OctaFile
@@ -24,7 +24,7 @@ sys.stdout = original_stdout
 NotificationManager: nm = nm()
 
 __all__ = [
-    "init",
+    "init", "is_online",
     "hasdataloaded", "__config__",
     "OctaStore", "OctaCluster",
     "DataStore",
