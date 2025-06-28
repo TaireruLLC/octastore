@@ -104,7 +104,7 @@ class Player:
         self.password = password
 
 # Create a sample player instance
-player = Player(objectname="john_doe", objectinstance=player, isencrypted=True)
+player = Player(username="john_doe", score=0, password="123")
 
 # -------------------------
 # Game Flow Functions
