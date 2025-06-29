@@ -50,7 +50,7 @@ pip install octastore
 ```python
 # OctaStore v0.2.2 Showcase Example
 
-from octastore import __config__, OctaCluster, DataStore, BaseObject, BaseKeyValue, NotificationManager
+from octastore import init, __config__, OctaCluster, DataStore, BaseObject, BaseKeyValue, NotificationManager; init(show_credits=True)
 from cryptography.fernet import Fernet
 import sys
 
