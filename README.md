@@ -1,11 +1,3 @@
-> 🚩 **Warning:** You are currently viewing a pre-release version of the project on GitHub. This version is **not yet available on PyPy** and contains forward-looking information, including:
-> 
-> * A future `gitbase` release (**v0.7.7** – only versions up to **v0.7.6** are currently available).
-> * The upcoming **OctaStore Web**, which is still under migration.
-> 
-> These components are scheduled for release alongside the **official launch of OctaStore v0.2.1**.
-> Thank you for your patience!
-
 # OctaStore 🚀
 
 **Your GitHub repos as encrypted, offline-first databases — powered by Python magic.**
@@ -37,7 +29,7 @@ GitBase used to share a name with another more popular product, and would, quite
 
 ---
 
-### What’s new in v0.2.1?
+### What’s new in v0.2.2?
 - Fixed `get_all` in example code missing `datatype` param.
 - Updated all files for tighter and better type annotations.
 - Added ability to import `is_online` function from `octastore`.
@@ -56,7 +48,7 @@ pip install octastore
 ### Getting Started — Example Code
 
 ```python
-# OctaStore v0.2.1 Showcase Example
+# OctaStore v0.2.2 Showcase Example
 
 from octastore import __config__, OctaCluster, DataStore, BaseObject, BaseKeyValue, NotificationManager
 from cryptography.fernet import Fernet
@@ -110,7 +102,7 @@ class Player:
         self.password = password
 
 # Create a sample player instance
-player = Player(username="john_doe", score=0, password="123")
+player = Player(username="john_doe", score=100, password="123")
 
 # -------------------------
 # Game Flow Functions
