@@ -25,19 +25,19 @@ You love GitHub, you love Python, but managing data with traditional databases f
 ### Why does OctaStore look so familiar?
 
 OctaStore is a rebraned version of our package `gitbase` ([gitbase v0.7.6](https://pypi.org/project/gitbase)) with a more unified engine.
-GitBase used to share a name with another more popular product, and would, quite honestly, cause headaches, so we rebranded and upgraded the engine.
+GitBase used to sshare a name with another more popular product, and would, quite honestly, cause headaches, so we rebranded and upgraded the engine.
 
 ---
 
-### What does the `-x` suffix mean in some version numbers?
+### What does the `-x` (`aX`) suffix mean in some version numbers?
 
-When you see a version number with a suffix like `-x` (e.g., `v0.0.0-1`), it indicates a pre-release. The number after the dash (`-`) reflects the order of the pre-release—higher numbers represent later pre-releases. For example, `v0.0.0-1` is the first pre-release of version `v0.0.0`, while `v0.0.0-2` is the second. The version without a suffix (e.g., `v0.0.0`) is the official release, which comes after all its pre-releases.
+When you see a version number with a suffix like `-x`/`aX` (e.g., `v0.0.0-1` or `v0.0.0a1`), it indicates a pre-release. The number after the dash (`-`) reflects the order of the pre-release—higher numbers represent later pre-releases. For example, `v0.0.0-1` is the first pre-release of version `v0.0.0`, while `v0.0.0a2` is the second. The version without a suffix (e.g., `v0.0.0`) is the official release, which comes after all its pre-releases.
 
 Pre-releases are created when we aren't fully confident in calling a version final. Not every release will have pre-releases. Additionally, some pre-releases may reference or depend on software that has not yet been publicly released. In such cases, the required components will be made available as soon as possible, either shortly before or after the official release.
 
 ---
 
-### What’s new in v0.3.2-2?
+### What’s new in v0.3.3a1?
 - Renamed `NotificationManager` to `LogManager` to make it eaiser to tell what it's for
 - Updated example code to display how to initialize `octastore` (with `init`)
 - Renamed `OctaCluster` to `OctaStore` and the old `OctaStore` to `OctaStoreLegacy`
@@ -60,7 +60,7 @@ pip install octastore
 ### Getting Started — Example Code
 
 ```python
-# OctaStore v0.3.2-2 Showcase Example
+# OctaStore v0.3.3a1 Showcase Example
 
 from octastore import init, __config__, OctaStore, DataBase, All, Object, KeyValue, LogManager; init()
 from cryptography.fernet import Fernet
@@ -97,7 +97,7 @@ __config__.use_offline = True # defaults to `True`, no need to type out unless y
 __config__.show_logs = True # defaults to `True`, no need to type out unless you want to set it to `False`
 __config__.use_version_path = False # defaults to `True`, this variable will decide if your app path will use a version subdirectory (meaning different versions will have different data)
 __config__.setdatpath() # Update `datpath` variable of `__config__` for offline data saving (you can also set it manually via `__config__.datpath = 'path/to/data'`)
-# the path setup with `__config.setdatpath()` will add an `__config__.cleanpath` property which can be used for other application needs besides OctaStore, it will return a clean path based on your os (ex. Windows -> C:/Users/YourUsername/Documents/Taireru LLC/Cool RPG Game/)
+# the path setup with `__config.setdatpath()` will add an `__config__.cleanpath` property which can be used for other application needs besides OctaStore, it will return a clean path based on your os (ex. Windows -> C:/Users/YourUsername/AppData/LocalLow/Taireru LLC/Cool RPG Game/)
 
 # -------------------------
 # System Initialization
