@@ -37,7 +37,7 @@ Pre-releases are created when we aren't fully confident in calling a version fin
 
 ---
 
-### What’s new in v0.3.2-1?
+### What’s new in v0.3.2-2?
 - Renamed `NotificationManager` to `LogManager` to make it eaiser to tell what it's for
 - Updated example code to display how to initialize `octastore` (with `init`)
 - Renamed `OctaCluster` to `OctaStore` and the old `OctaStore` to `OctaStoreLegacy`
@@ -60,7 +60,7 @@ pip install octastore
 ### Getting Started — Example Code
 
 ```python
-# OctaStore v0.3.2-1 Showcase Example
+# OctaStore v0.3.2-2 Showcase Example
 
 from octastore import init, __config__, OctaStore, DataBase, All, Object, KeyValue, LogManager; init()
 from cryptography.fernet import Fernet
