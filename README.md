@@ -29,23 +29,17 @@ GitBase used to sshare a name with another more popular product, and would, quit
 
 ---
 
-### What does the `-x` (`aX`) suffix mean in some version numbers?
+### What does the `-x` suffix mean in some version numbers?
 
-When you see a version number with a suffix like `-x`/`aX` (e.g., `v0.0.0-1` or `v0.0.0a1`), it indicates a pre-release. The number after the dash (`-`) reflects the order of the pre-release—higher numbers represent later pre-releases. For example, `v0.0.0-1` is the first pre-release of version `v0.0.0`, while `v0.0.0a2` is the second. The version without a suffix (e.g., `v0.0.0`) is the official release, which comes after all its pre-releases.
+When you see a version number with a suffix like `-x` (e.g., `v0.0.0-1` or `v0.0.0`), it indicates a pre-release. The number after the dash (`-`) reflects the order of the pre-release—higher numbers represent later pre-releases. For example, `v0.0.0-1` is the first pre-release of version `v0.0.0`, while `v0.0.0-2` is the second. The version without a suffix (e.g., `v0.0.0`) is the official release, which comes after all its pre-releases.
 
-Pre-releases are created when we aren't fully confident in calling a version final. Not every release will have pre-releases. Additionally, some pre-releases may reference or depend on software that has not yet been publicly released. In such cases, the required components will be made available as soon as possible, either shortly before or after the official release.
+Pre-releases are created when we aren't fully confident in calling a version final and are never released on PyPi. Not every release will have pre-releases. Additionally, some pre-releases may reference or depend on software that has not yet been publicly released. In such cases, the required components will be made available as soon as possible, either shortly before or after the official release.
 
 ---
 
-### What’s new in v0.3.3a1?
-- Renamed `NotificationManager` to `LogManager` to make it eaiser to tell what it's for
-- Updated example code to display how to initialize `octastore` (with `init`)
-- Renamed `OctaCluster` to `OctaStore` and the old `OctaStore` to `OctaStoreLegacy`
-- Fixed bugs in example code
-- Added new `datatype` known as `All` which will allow for non-explicit selection of data in `get_all`
-- Remade all `datatypes` into classes for type annotation support
-- Renamed `DataStore` to `DataBase`
-- Renamed `db` param of `DataBase` to `core` to better reflect that the `DataBase` class itself is the database
+### What’s new in v0.3.4?
+
+- "First Entry" patch
 
 ---
 
@@ -60,7 +54,7 @@ pip install octastore
 ### Getting Started — Example Code
 
 ```python
-# OctaStore v0.3.3a1 Showcase Example
+# OctaStore v0.3.4 Showcase Example
 
 from octastore import init, __config__, OctaStore, DataBase, All, Object, KeyValue, LogManager; init()
 from cryptography.fernet import Fernet
