@@ -60,12 +60,18 @@ class All:
         self.objectinstance: Any = objectinstance
         self.attributes: Union[None, List[str]] = attributes
 
+_FERNET_TOKEN_MINLEN = 128  # Fernet token minimum length
+
 def is_probably_encrypted(data: str) -> bool:
-    try:
-        # Fernet-encrypted strings are Base64-encoded, 128+ chars, no curly braces
-        return not data.strip().startswith("{")
-    except:
-        return True
+    """
+    Determines if the data appears to be Fernet-encrypted.
+
+    Returns True only if the data looks encrypted (Base64, no JSON markers).
+    """
+    data = data.strip()
+    if len(data) < _FERNET_TOKEN_MINLEN:
+        return False
+    return all(c.isalnum() or c in "-_" for c in data.rstrip("="))
 
 class DataBase:
     """
@@ -97,17 +103,19 @@ class DataBase:
         """
         return self.fernet.encrypt(data.encode('utf-8'))
 
-    def decrypt_data(self, encrypted_data: bytes) -> str:
+    def decrypt_data(self, encrypted_data: Union[bytes, str]) -> str:
         """
         Decrypts the given encrypted data.
 
         Args:
-            encrypted_data (bytes): The data to decrypt.
+            encrypted_data (bytes | str): The data to decrypt.
 
         Returns:
             str: The decrypted data.
         """
-        return self.fernet.decrypt(encrypted_data).decode('utf-8')
+        if isinstance(encrypted_data, str):
+            encrypted_data = encrypted_data.encode("utf-8")
+        return self.fernet.decrypt(encrypted_data).decode("utf-8")
 
     def save_data(self, key: str, value: Any, path: Optional[str] = "data", isencrypted: Optional[bool] = False) -> None:
         """
@@ -479,11 +487,15 @@ class DataBase:
                 if not online_data:
                     return None
 
-                try:
-                    decrypted = self.decrypt_data(online_data.encode('utf-8'))
-                except Exception as e:
-                    if __config__.show_logs:
-                        cPrint("YELLOW", f"Decryption failed for {objectname}, falling back to plain text: {e}")
+                decrypted: str
+                if isencrypted and is_probably_encrypted(online_data):
+                    try:
+                        decrypted = self.decrypt_data(online_data)
+                    except Exception as e:
+                        if __config__.show_logs:
+                            cPrint("YELLOW", f"Decryption failed for {objectname}, falling back to plain text: {e}")
+                        decrypted = online_data
+                else:
                     decrypted = online_data
 
                 return jsonpickle.decode(decrypted)
@@ -537,9 +549,9 @@ class DataBase:
             if is_online():
                 try:
                     for key in self.core.get_all_keys(path):
-                        value = self.load_data(key, isencrypted, path)
-                        if value is not None:
-                            all_data[key] = value
+                        kv = self.load_data(key, isencrypted, path)
+                        if kv is not None:
+                            all_data[kv.key] = kv.value
                 except Exception as e:
                     if __config__.show_logs:
                         cPrint("RED", f"Error loading online data: {e}")
