@@ -37,9 +37,9 @@ Pre-releases are created when we aren't fully confident in calling a version fin
 
 ---
 
-### What’s new in v0.3.4?
+### What’s new in v0.3.6?
 
-- "First Entry" patch
+- CLI support
 
 ---
 
@@ -54,7 +54,7 @@ pip install octastore
 ### Getting Started — Example Code
 
 ```python
-# OctaStore v0.3.4 Showcase Example
+# OctaStore v0.3.6 Showcase Example
 
 from octastore import init, __config__, OctaStore, DataBase, All, Object, KeyValue, LogManager; init()
 from cryptography.fernet import Fernet
@@ -91,7 +91,6 @@ __config__.use_offline = True # defaults to `True`, no need to type out unless y
 __config__.show_logs = True # defaults to `True`, no need to type out unless you want to set it to `False`
 __config__.use_version_path = False # defaults to `True`, this variable will decide if your app path will use a version subdirectory (meaning different versions will have different data)
 __config__.setdatpath() # Update `datpath` variable of `__config__` for offline data saving (you can also set it manually via `__config__.datpath = 'path/to/data'`)
-# the path setup with `__config.setdatpath()` will add an `__config__.cleanpath` property which can be used for other application needs besides OctaStore, it will return a clean path based on your os (ex. Windows -> C:/Users/YourUsername/AppData/LocalLow/Taireru LLC/Cool RPG Game/)
 
 # -------------------------
 # System Initialization
@@ -113,7 +112,6 @@ player = Player(username="john_doe", score=100, password="123")
 # -------------------------
 # Save & Load Player Data with Encryption
 # -------------------------
-# Save player data to the repository
 db.save_object(
     objectname="john_doe",
     objectinstance=player,
@@ -122,7 +120,6 @@ db.save_object(
     path="players"
 )
 
-# Load player data
 db.load_object(objectname="john_doe", objectinstance=player, isencrypted=True)
 
 # -------------------------
@@ -137,8 +134,7 @@ def main_menu():
 # -------------------------
 # Account Validation & Login
 # -------------------------
-# Validate player credentials
-if db.get_all(isencrypted=False, datatype=Object, path="players"): # datatype can be All, Object or KeyValue, but defaults to All.
+if db.get_all(isencrypted=False, datatype=Object, path="players"):
     if player.password == input("Enter your password: "):
         print("Login successful!")
         load_game()
@@ -149,29 +145,100 @@ if db.get_all(isencrypted=False, datatype=Object, path="players"): # datatype ca
 # -------------------------
 # Save & Load General Data with Encryption
 # -------------------------
-# Save data (key-value) to the repository (with encryption)
 db.save_data(key="key_name", value=69, path="data", isencrypted=True)
 
-# Load and display specific key-value pair
 loaded_key_value = db.load_data(key="key_name", path="data", isencrypted=True)
 print(f"Key: {loaded_key_value.key}, Value: {loaded_key_value.value}")
 
-# Display all stored data
 print("All stored data:", db.get_all(isencrypted=True, datatype=KeyValue, path="data"))
 
-# Delete specific key-value data
 db.delete_data(key="key_name", path="data")
 
 # -------------------------
 # Player Account Management
 # -------------------------
-# Display all data
 print("All data:", db.get_all(isencrypted=True, datatype=All, path="players"))
 
-# Delete a specific player account
-LogManager.hide()  # Hide logs temporarily
+LogManager.hide()
 db.delete_object(objectname="john_doe")
-LogManager.show()  # Show logs again
+LogManager.show()
+```
+
+---
+
+### 🔧 OctaStore CLI (Command-Line Interface)
+
+OctaStore comes with a powerful CLI tool to help you interact with your data directly from the terminal — no Python scripting required.
+
+#### ✅ Setup
+
+If you've installed OctaStore as a module in a project, you can expose the CLI like so:
+
+```bash
+octastore --help
+```
+
+> Or alias it inside a shell script for convenience.
+
+---
+
+#### 🚀 Basic Usage
+
+Every CLI command requires authentication info:
+
+```bash
+--tokens YOUR_TOKEN --owners YOUR_USERNAME --repos YOUR_REPO
+```
+
+For cluster mode (multi-repo):
+
+```bash
+--cluster --tokens TOKEN1 TOKEN2 --owners OWNER1 OWNER2 --repos REPO1 REPO2
+```
+
+---
+
+#### 📦 Commands Overview
+
+| Command            | Description                                    |
+| ------------------ | ---------------------------------------------- |
+| `init`             | Initialize the OctaStore system                |
+| `is-online`        | Check GitHub connectivity                      |
+| `config get/set`   | Read/write internal config flags               |
+| `log show/hide`    | Toggle verbose logs                            |
+| `octafile`         | Stream, play audio, or play video from repo    |
+| `upload-file`      | Upload a file to the GitHub repo               |
+| `download-file`    | Download a file from the repo to your machine  |
+| `save-kv`          | Save a key-value pair                          |
+| `load-kv`          | Load a key-value pair                          |
+| `delete-kv`        | Delete a key-value pair                        |
+| `save-object`      | Save a class/object by attributes              |
+| `load-object`      | Load a saved object into memory                |
+| `delete-object`    | Delete a stored object                         |
+| `list-all`         | List stored keys/objects                       |
+| `get-all`          | Retrieve and print all stored data             |
+| `generate-example` | Save an example code file to `example_code.py` |
+
+---
+
+#### 🔐 Encryption & Keys
+
+You can enable encryption and pass a Fernet key:
+
+```bash
+--encrypted --keyfile path/to/key.key
+```
+
+If `--keyfile` is omitted, a new encryption key is generated.
+
+---
+
+#### 📁 Example
+
+```bash
+octastore save-kv \
+  --tokens ghp_XXXX --owners user --repos repo \
+  --key "level" --value "5" --encrypted
 ```
 
 ---
