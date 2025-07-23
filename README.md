@@ -1,3 +1,5 @@
+![OctaStore Logo](https://tairerullc.vercel.app/images/octastore-logo.png)
+
 # OctaStore 🚀
 
 **Your GitHub repos as encrypted, offline-first databases — powered by Python magic.**
@@ -37,9 +39,10 @@ Pre-releases are created when we aren't fully confident in calling a version fin
 
 ---
 
-### What’s new in v0.3.6?
+### What’s new in v0.3.7?
 
 - CLI support
+- Logo branding
 
 ---
 
@@ -54,7 +57,7 @@ pip install octastore
 ### Getting Started — Example Code
 
 ```python
-# OctaStore v0.3.6 Showcase Example
+# OctaStore v0.3.7 Showcase Example
 
 from octastore import init, __config__, OctaStore, DataBase, All, Object, KeyValue, LogManager; init()
 from cryptography.fernet import Fernet
